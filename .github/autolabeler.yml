@@ -1,0 +1,7 @@
+code: ["lib"]
+legal: ["LICENSE*", "NOTICES*"]
+ci: [".github"]
+dependencies: ["package*.json"]
+config: [".husky",".commitlint*",".npm*","jest*","tsconfig.json",".eslint*"]
+testing: ["e2e", "*spec*"]
+documentation: "*.md"
