@@ -1,7 +1,4 @@
 {
-    "extends": "./tsconfig.json",
-    "include": [
-        "lib/**/*",
-        "e2e/**/*"
-    ]
-  }
+  "extends": "./tsconfig.json",
+  "include": ["lib/**/*", "e2e/**/*"]
+}

@@ -1,5 +1,8 @@
 import { SetMetadata } from '@nestjs/common';
-import { BULL_MODULE_ON_QUEUE_EVENT, BULL_MODULE_ON_GLOBAL_QUEUE_EVENT } from '../bull.constants';
+import {
+  BULL_MODULE_ON_QUEUE_EVENT,
+  BULL_MODULE_ON_GLOBAL_QUEUE_EVENT,
+} from '../bull.constants';
 import {
   BullQueueEvent,
   BullQueueEventOptions,
@@ -79,7 +82,10 @@ export const OnGlobalQueueProgress = (options?: QueueEventDecoratorOptions) =>
   OnGlobalQueueEvent({ ...options, eventName: BullQueueGlobalEvents.PROGRESS });
 
 export const OnGlobalQueueCompleted = (options?: QueueEventDecoratorOptions) =>
-  OnGlobalQueueEvent({ ...options, eventName: BullQueueGlobalEvents.COMPLETED });
+  OnGlobalQueueEvent({
+    ...options,
+    eventName: BullQueueGlobalEvents.COMPLETED,
+  });
 
 export const OnGlobalQueueFailed = (options?: QueueEventDecoratorOptions) =>
   OnGlobalQueueEvent({ ...options, eventName: BullQueueGlobalEvents.FAILED });

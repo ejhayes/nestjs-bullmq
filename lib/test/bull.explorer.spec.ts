@@ -1,14 +1,14 @@
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import { Test, TestingModule } from '@nestjs/testing';
-import {Worker} from 'bullmq'
+import { Worker } from 'bullmq';
 import { BullExplorer } from '../bull.explorer';
 import { BullModule } from '../bull.module';
 import { getQueueToken } from '../utils';
 
 jest.mock('bullmq', () => ({
-  ...jest.requireActual('bullmq') as {}, // https://stackoverflow.com/questions/51189388/typescript-spread-types-may-only-be-created-from-object-types/51193091
-  Worker: jest.fn()
-}))
+  ...(jest.requireActual('bullmq') as {}), // https://stackoverflow.com/questions/51189388/typescript-spread-types-may-only-be-created-from-object-types/51193091
+  Worker: jest.fn(),
+}));
 
 describe('BullExplorer', () => {
   let bullExplorer: BullExplorer;
@@ -29,7 +29,7 @@ describe('BullExplorer', () => {
 
   afterEach(() => {
     (Worker as unknown as jest.Mock).mockClear();
-  })
+  });
 
   describe('handleProcessor', () => {
     it('should create a Worker', () => {
@@ -40,9 +40,14 @@ describe('BullExplorer', () => {
     });
     it('should create a Worker with bullmq options if they exist', () => {
       const instance = { handler: jest.fn() };
-      const queue = { name: 'test', opts: {connection: {host: 'someHost'}} } as any;
+      const queue = {
+        name: 'test',
+        opts: { connection: { host: 'someHost' } },
+      } as any;
       bullExplorer.handleProcessor(instance, 'handler', queue, null, false);
-      expect(Worker).toHaveBeenCalledWith('test', expect.any(Function), {connection: {host: 'someHost'}});
+      expect(Worker).toHaveBeenCalledWith('test', expect.any(Function), {
+        connection: { host: 'someHost' },
+      });
     });
     it('should set concurrency on a Worker', () => {
       const instance = { handler: jest.fn() };
@@ -56,7 +61,7 @@ describe('BullExplorer', () => {
         false,
         opts,
       );
-      expect(Worker).toHaveBeenCalledWith('test', expect.any(Function), opts)
+      expect(Worker).toHaveBeenCalledWith('test', expect.any(Function), opts);
     });
     it('should set concurrency on a Worker with a value of 0', () => {
       const instance = { handler: jest.fn() };
@@ -70,7 +75,7 @@ describe('BullExplorer', () => {
         false,
         opts,
       );
-      expect(Worker).toHaveBeenCalledWith('test', expect.any(Function), opts)
+      expect(Worker).toHaveBeenCalledWith('test', expect.any(Function), opts);
     });
   });
 
