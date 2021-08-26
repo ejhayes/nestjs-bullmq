@@ -4,7 +4,7 @@
 
 ## Description
 
-[BullMQ](https://github.com/taskforcesh/bullmq) module for [Nest](https://github.com/nestjs/nest). This should *hopefully* be a drop-in replacement for [@nest/bull](https://www.npmjs.com/package/@nestjs/bull) package.
+[BullMQ](https://github.com/taskforcesh/bullmq) module for [Nest](https://github.com/nestjs/nest). This should _hopefully_ be a drop-in replacement for [@nest/bull](https://www.npmjs.com/package/@nestjs/bull) package.
 
 There is one caveat with this implementation: [Queue Schedulers](https://docs.bullmq.io/guide/queuescheduler). This library does not automatically create a queue scheduler because
 of the potential drain on resources:
