@@ -40,6 +40,7 @@ jobs:
         uses: wearerequired/lint-action@v1
         with:
           eslint: true
+          eslint_args: "-c .eslintrc.js"
           eslint_extensions: ts
           prettier: true
       - run: npm run build
