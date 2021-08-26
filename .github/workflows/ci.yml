@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x]
+        node-version: [12.x, 14.x, 15.x]
     
     services:
       redis:
@@ -40,6 +40,7 @@ jobs:
         uses: wearerequired/lint-action@v1
         with:
           eslint: true
+          eslint_command_prefix: "npm run"
           prettier: true
       - run: npm run build
       - uses: mattallty/jest-github-action@v1
