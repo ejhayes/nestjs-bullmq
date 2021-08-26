@@ -44,9 +44,9 @@ jobs:
           prettier: true
           prettier_extensions: ts,json,md,js,yml
           auto_fix: true
-          commit_message: "chore(lint): Fix code style issues with ${linter}"
+          commit_message: 'chore(lint): Fix code style issues with ${linter}'
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          git_email: "lint-action@github.com"
+          git_email: 'lint-action@github.com'
       - run: npm run build
       - uses: mattallty/jest-github-action@v1
         env:

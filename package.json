@@ -22,7 +22,8 @@
     "lint:fix": "eslint \"lib/**/*.ts\" --fix",
     "release": "semantic-release",
     "test": "jest --detectOpenHandles --forceExit --coverage",
-    "test:e2e": "jest --config=jest-e2e.config.js --detectOpenHandles --forceExit --coverage --runInBand"
+    "test:e2e": "jest --config=jest-e2e.config.js --detectOpenHandles --forceExit --coverage --runInBand",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{ts,js,md,json}": [
