@@ -1,6 +1,7 @@
 {
   "git": {
-    "commit": false
+    "commit": false,
+    "requireUpstream": false
   },
   "github": {
     "release": true,
@@ -8,5 +9,10 @@
   },
   "npm": {
     "publish": false
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "ignoreRecommendedBump": true
+    }
   }
 }
