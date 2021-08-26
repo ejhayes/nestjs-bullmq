@@ -11,7 +11,7 @@ of the potential drain on resources:
 
 > It is ok to have as many QueueScheduler instances as you want, just keep in mind that every instance will perform some bookkeeping so it may create some noticeable CPU and IO usage in your Redis instances.
 
-PRs welcome to fix this!!!
+PRs welcome to fix this!!!!
 
 ## Installation
 
