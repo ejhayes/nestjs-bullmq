@@ -1,9 +1,8 @@
-name: "CI"
+name: 'CI'
 
 on:
-  push:
-    branches-ignore:
-      - master
+  pull_request:
+    types: [synchronize]
 
 jobs:
   ci:
@@ -11,8 +10,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x]
-    
+        node-version: [12.x, 14.x, 15.x]
+
     services:
       redis:
         image: redis:alpine
@@ -37,7 +36,22 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: npm run lint
+      - name: Run linters
+        uses: wearerequired/lint-action@v1
+        with:
+          eslint: true
+          eslint_extensions: ts
+          prettier: true
+          prettier_extensions: ts,json,md,js,yml
+          auto_fix: false
+          commit_message: 'chore(lint): Fix code style issues with ${linter}'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git_email: 'lint-action@github.com'
       - run: npm run build
-      - run: npm test
-      - run: npm run test:e2e
+      - uses: mattallty/jest-github-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: mattallty/jest-github-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          test-command: 'npm run test:e2e'

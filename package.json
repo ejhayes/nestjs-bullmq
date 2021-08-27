@@ -16,15 +16,17 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf -rf dist && tsc -p tsconfig.json",
-    "format": "prettier --write **/*.{ts,json}",
+    "format": "prettier -c **/*.{md,ts,json,yml}",
+    "format:fix": "prettier --write **/*.{md,ts,json,yml}",
     "lint": "eslint \"lib/**/*.ts\"",
     "lint:fix": "eslint \"lib/**/*.ts\" --fix",
     "release": "semantic-release",
     "test": "jest --detectOpenHandles --forceExit --coverage",
-    "test:e2e": "jest --config=jest-e2e.config.js --detectOpenHandles --forceExit --coverage --runInBand"
+    "test:e2e": "jest --config=jest-e2e.config.js --detectOpenHandles --forceExit --coverage --runInBand",
+    "prepare": "husky install"
   },
   "lint-staged": {
-    "*.ts": [
+    "*.{ts,js,md,json}": [
       "prettier --write"
     ],
     "package.json": [

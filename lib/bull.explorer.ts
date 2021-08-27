@@ -28,8 +28,8 @@ export class BullExplorer implements OnModuleInit {
   }
 
   explore() {
-    const workers: Record<string, Worker> = {}
-    const queueEvents: Record<string, QueueEvents> = {}
+    const workers: Record<string, Worker> = {};
+    const queueEvents: Record<string, QueueEvents> = {};
     const providers: InstanceWrapper[] = this.discoveryService
       .getProviders()
       .filter((wrapper: InstanceWrapper) =>
@@ -39,9 +39,8 @@ export class BullExplorer implements OnModuleInit {
     providers.forEach((wrapper: InstanceWrapper) => {
       const { instance, metatype } = wrapper;
       const isRequestScoped = !wrapper.isDependencyTreeStatic();
-      const {
-        name: queueName,
-      } = this.metadataAccessor.getQueueComponentMetadata(metatype);
+      const { name: queueName } =
+        this.metadataAccessor.getQueueComponentMetadata(metatype);
 
       const queueToken = getQueueToken(queueName);
       const bullQueue = this.getQueue(queueToken, queueName);
@@ -64,14 +63,15 @@ export class BullExplorer implements OnModuleInit {
             const metadata = this.metadataAccessor.getProcessMetadata(
               instance[key],
             );
-            workers[`${bullQueue.name}:::${metadata.name || '*'}`] = this.handleProcessor(
-              instance,
-              key,
-              bullQueue,
-              wrapper.host,
-              isRequestScoped,
-              metadata,
-            );
+            workers[`${bullQueue.name}:::${metadata.name || '*'}`] =
+              this.handleProcessor(
+                instance,
+                key,
+                bullQueue,
+                wrapper.host,
+                isRequestScoped,
+                metadata,
+              );
           } else if (this.metadataAccessor.isGlobalListener(instance[key])) {
             const metadata = this.metadataAccessor.getGlobalListenerMetadata(
               instance[key],
@@ -79,8 +79,9 @@ export class BullExplorer implements OnModuleInit {
             const keyName = `${bullQueue.name}:::${metadata.name || '*'}`;
 
             // Only create one instance of queue events
-            if ( !(keyName in queueEvents) ) {
-              queueEvents[`${bullQueue.name}:::${metadata.name || '*'}`] = new QueueEvents(bullQueue.name, bullQueue.opts)
+            if (!(keyName in queueEvents)) {
+              queueEvents[`${bullQueue.name}:::${metadata.name || '*'}`] =
+                new QueueEvents(bullQueue.name, bullQueue.opts);
             }
           }
         },
@@ -95,12 +96,26 @@ export class BullExplorer implements OnModuleInit {
             const metadata = this.metadataAccessor.getListenerMetadata(
               instance[key],
             );
-            this.handleListener(instance, key, wrapper, bullQueue, workers[`${bullQueue.name}:::${metadata.name || '*'}`], metadata);
+            this.handleListener(
+              instance,
+              key,
+              wrapper,
+              bullQueue,
+              workers[`${bullQueue.name}:::${metadata.name || '*'}`],
+              metadata,
+            );
           } else if (this.metadataAccessor.isGlobalListener(instance[key])) {
             const metadata = this.metadataAccessor.getGlobalListenerMetadata(
               instance[key],
             );
-            this.handleListener(instance, key, wrapper, bullQueue, queueEvents[`${bullQueue.name}:::${metadata.name || '*'}`], metadata);
+            this.handleListener(
+              instance,
+              key,
+              wrapper,
+              bullQueue,
+              queueEvents[`${bullQueue.name}:::${metadata.name || '*'}`],
+              metadata,
+            );
           }
         },
       );
@@ -149,7 +164,11 @@ export class BullExplorer implements OnModuleInit {
       processor = instance[key].bind(instance);
     }
 
-    return new Worker(queue.name, processor, Object.assign(queue.opts || {}, options));
+    return new Worker(
+      queue.name,
+      processor,
+      Object.assign(queue.opts || {}, options),
+    );
   }
 
   handleListener(

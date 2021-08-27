@@ -18,7 +18,7 @@ import {
 
 function buildQueue(option: BullModuleOptions): Queue {
   const queue: Queue = new Queue(option.name ? option.name : 'default', option);
-  const workers: (Worker|QueueScheduler)[] = [];
+  const workers: (Worker | QueueScheduler)[] = [];
 
   /**
    * TODO: Add top level option to allow for creation of scheduler. This current
@@ -63,7 +63,7 @@ function buildQueue(option: BullModuleOptions): Queue {
       }
     });
   }
-  ((queue as unknown) as OnApplicationShutdown).onApplicationShutdown = function (
+  (queue as unknown as OnApplicationShutdown).onApplicationShutdown = function (
     this: Queue,
   ) {
     return Promise.all([...workers.map((w) => w.close()), this.close()]);

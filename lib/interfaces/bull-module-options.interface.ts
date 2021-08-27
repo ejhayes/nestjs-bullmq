@@ -17,7 +17,7 @@ export interface BullModuleOptions extends Bull.QueueOptions {
   /**
    * Disable creation of scheduler
    */
-  disableScheduler?: boolean
+  disableScheduler?: boolean;
 
   /**
    * Shared configuration key
