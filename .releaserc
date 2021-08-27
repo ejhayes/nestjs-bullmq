@@ -3,7 +3,9 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     ["@semantic-release/npm", {
-      "tarballDir": "dist"
+      "tarballDir": "dist",
+      "npmPublish": false,
+      "pkgRoot": "dist"
     }],
     "@semantic-release/github"
   ]
