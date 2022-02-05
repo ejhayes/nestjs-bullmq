@@ -1,14 +1,15 @@
 {
-  "name": "@ejhayes/nestjs-bullmq",
-  "version": "0.0.0-development",
+  "name": "@biosimulations/nestjs-bullmq",
+  "version": "1.0.7",
+  "private": false,
   "description": "Nest - modern, fast, powerful node.js web framework (@bullmq)",
-  "homepage": "https://github.com/ejhayes/nestjs-bullmq",
+  "homepage": "https://github.com/biosimulations/nestjs-bullmq",
   "bugs": {
-    "url": "https://github.com/ejhayes/nestjs-bullmq/issues"
+    "url": "https://github.com/biosimulations/nestjs-bullmq/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ejhayes/nestjs-bullmq.git"
+    "url": "https://github.com/biosimulations/nestjs-bullmq.git"
   },
   "license": "MIT",
   "contributors": [],

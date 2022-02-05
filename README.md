@@ -4,12 +4,14 @@
 </p>
 
 <p align="center">
-    <a href="https://www.npmjs.com/@ejhayes/nestjs-bullmq" target="_blank"><img src="https://img.shields.io/npm/v/@ejhayes/nestjs-bullmq.svg" alt="NPM Version" /></a>
-    <a href="https://www.npmjs.com/@ejhayes/nestjs-bullmq" target="_blank"><img src="https://img.shields.io/npm/l/@ejhayes/nestjs-bullmq.svg" alt="Package License" /></a>
-    <a href="https://www.npmjs.com/@ejhayes/nestjs-bullmq" target="_blank"><img src="https://img.shields.io/npm/dm/@ejhayes/nestjs-bullmq.svg" alt="NPM Downloads" /></a>
+    <a href="https://www.npmjs.com/@biosimulations/nestjs-bullmq" target="_blank"><img src="https://img.shields.io/npm/v/@biosimulations/nestjs-bullmq.svg" alt="NPM Version" /></a>
+    <a href="https://www.npmjs.com/@biosimulations/nestjs-bullmq" target="_blank"><img src="https://img.shields.io/npm/l/@biosimulations/nestjs-bullmq.svg" alt="Package License" /></a>
+    <a href="https://www.npmjs.com/@biosimulations/nestjs-bullmq" target="_blank"><img src="https://img.shields.io/npm/dm/@biosimulations/nestjs-bullmq.svg" alt="NPM Downloads" /></a>
 </p>
 
 ## Description
+
+> This package is a fork of [@ejhayes/nestjs-bullmq](https://github.com/ejhayes/nestjs-bullmq) that is customized to work with the build of [BioSimulations](https://github.com/biosimulations/biosimulations). It also contains updates to some packages and dependencies to work with NestJS v8 without npm errors. While you are welcome to use this package, the original package may be better suited for your needs.
 
 [BullMQ](https://github.com/taskforcesh/bullmq) module for [Nest](https://github.com/nestjs/nest). This should _hopefully_ be a drop-in replacement for [@nest/bull](https://www.npmjs.com/package/@nestjs/bull) package.
 
@@ -23,7 +25,7 @@ PRs welcome to fix this!
 ## Installation
 
 ```bash
-$ npm i --save @ejhayes/nestjs-bullmq
+$ npm i --save @biosimulations/nestjs-bullmq
 ```
 
 ## Quick Start
