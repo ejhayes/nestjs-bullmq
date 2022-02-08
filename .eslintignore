@@ -1,1 +1,6 @@
 lib/**/*.spec.ts
+e2e/
+**/jest-e2e.config.js
+**/jest.config.js
+node_modules
+dist
