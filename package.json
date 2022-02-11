@@ -1,6 +1,6 @@
 {
   "name": "@biosimulations/nestjs-bullmq",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": false,
   "description": "Nest - modern, fast, powerful node.js web framework (@bullmq)",
   "homepage": "https://github.com/biosimulations/nestjs-bullmq",
