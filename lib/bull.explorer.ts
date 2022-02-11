@@ -23,11 +23,11 @@ export class BullExplorer implements OnModuleInit {
     private readonly metadataScanner: MetadataScanner,
   ) {}
 
-  onModuleInit() {
+  public onModuleInit(): void {
     this.explore();
   }
 
-  explore() {
+  private explore() {
     const workers: Record<string, Worker> = {};
     const queueEvents: Record<string, QueueEvents> = {};
     const providers: InstanceWrapper[] = this.discoveryService
