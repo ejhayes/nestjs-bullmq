@@ -4,6 +4,7 @@ import * as Bull from 'bullmq';
 import { BullMetadataAccessor } from './bull-metadata.accessor';
 import { BullExplorer } from './bull.explorer';
 import {
+  createQueueEventsProviders,
   createQueueOptionProviders,
   createQueueProviders,
 } from './bull.providers';
@@ -119,14 +120,21 @@ export class BullModule {
     };
   }
 
+  //Static registerQueueScheduler
+
   static registerQueue(...options: BullModuleOptions[]): DynamicModule {
     const queueProviders = createQueueProviders([].concat(options));
+    const queueEventsProviders = createQueueEventsProviders([].concat(options));
     const queueOptionProviders = createQueueOptionProviders([].concat(options));
     return {
       module: BullModule,
       imports: [BullModule.registerCore()],
-      providers: [...queueOptionProviders, ...queueProviders],
-      exports: queueProviders,
+      providers: [
+        ...queueOptionProviders,
+        ...queueProviders,
+        ...queueEventsProviders,
+      ],
+      exports: [...queueProviders, ...queueEventsProviders],
     };
   }
 
@@ -135,6 +143,7 @@ export class BullModule {
   ): DynamicModule {
     const optionsArr = [].concat(options);
     const queueProviders = createQueueProviders(optionsArr);
+    const queueEventsProviders = createQueueEventsProviders(optionsArr);
     const imports = this.getUniqImports(optionsArr);
     const asyncQueueOptionsProviders = options
       .map((queueOptions) => this.createAsyncProviders(queueOptions))
@@ -143,8 +152,12 @@ export class BullModule {
     return {
       imports: imports.concat(BullModule.registerCore()),
       module: BullModule,
-      providers: [...asyncQueueOptionsProviders, ...queueProviders],
-      exports: queueProviders,
+      providers: [
+        ...asyncQueueOptionsProviders,
+        ...queueProviders,
+        ...queueEventsProviders,
+      ],
+      exports: [...queueProviders, ...queueEventsProviders],
     };
   }
 
@@ -197,11 +210,8 @@ export class BullModule {
         inject: [optionalSharedConfigHolderRef, ...(asyncOptions.inject || [])],
       };
     }
-    // `as Type<BullOptionsFactory>` is a workaround for microsoft/TypeScript#31603
-    const inject = [
-      (asyncOptions.useClass ||
-        asyncOptions.useExisting) as Type<BullOptionsFactory>,
-    ];
+
+    const inject = [asyncOptions.useClass || asyncOptions.useExisting];
     return {
       provide: getQueueOptionsToken(asyncOptions.name),
       useFactory: async (
@@ -224,7 +234,7 @@ export class BullModule {
     if (options.useExisting || options.useFactory) {
       return [this.createAsyncSharedConfigurationProvider(configKey, options)];
     }
-    const useClass = options.useClass as Type<SharedBullConfigurationFactory>;
+    const useClass = options.useClass;
     return [
       this.createAsyncSharedConfigurationProvider(configKey, options),
       {
@@ -245,11 +255,8 @@ export class BullModule {
         inject: options.inject || [],
       };
     }
-    // `as Type<SharedBullConfigurationFactory>` is a workaround for microsoft/TypeScript#31603
-    const inject = [
-      (options.useClass ||
-        options.useExisting) as Type<SharedBullConfigurationFactory>,
-    ];
+
+    const inject = [options.useClass || options.useExisting];
     return {
       provide: getSharedConfigToken(configKey),
       useFactory: async (optionsFactory: SharedBullConfigurationFactory) =>

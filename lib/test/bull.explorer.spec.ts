@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Worker } from 'bullmq';
 import { BullExplorer } from '../bull.explorer';
 import { BullModule } from '../bull.module';
-import { getQueueToken } from '../utils';
+import { getQueueEventsToken, getQueueToken } from '../utils';
 
 jest.mock('bullmq', () => ({
   ...(jest.requireActual('bullmq') as {}), // https://stackoverflow.com/questions/51189388/typescript-spread-types-may-only-be-created-from-object-types/51193091
@@ -118,6 +118,29 @@ describe('BullExplorer', () => {
       const queue = explorer.getQueue(queueToken, 'test');
       expect(queue).toBeDefined();
       expect(queue).toBe(fakeQueue);
+
+      await moduleRef.close();
+    });
+  });
+  describe('getQueueEvents', () => {
+    it('should return the queueEvents matching the given token', async () => {
+      const queueToken = getQueueToken('test');
+      const queueEventsToken = getQueueEventsToken('test');
+      console.log(queueEventsToken);
+      const fakeQueueEvents = 'I am a fake queue';
+
+      const moduleRef = await Test.createTestingModule({
+        imports: [BullModule.registerQueue({ name: 'test' })],
+      })
+        .overrideProvider(queueEventsToken)
+        .useValue(fakeQueueEvents)
+        .compile();
+
+      const explorer = moduleRef.get(BullExplorer);
+
+      const queue = explorer.getQueueEvents(queueEventsToken, 'test');
+      expect(queue).toBeDefined();
+      expect(queue).toBe(fakeQueueEvents);
 
       await moduleRef.close();
     });
