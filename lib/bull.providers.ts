@@ -1,10 +1,11 @@
 import { flatten, OnApplicationShutdown, Provider } from '@nestjs/common';
 import * as Bull from 'bullmq';
-import { Queue, Worker, QueueScheduler } from 'bullmq';
+import { Queue, Worker, QueueScheduler, QueueEvents } from 'bullmq';
 import { BullQueueProcessor } from './bull.types';
 import { createConditionalDepHolder, IConditionalDepHolder } from './helpers';
 import { BullModuleOptions } from './interfaces/bull-module-options.interface';
 import {
+  getQueueEventsToken,
   getQueueOptionsToken,
   getQueueToken,
   getSharedConfigToken,
@@ -15,6 +16,10 @@ import {
   isProcessorCallback,
   isSeparateProcessor,
 } from './utils/helpers';
+
+function buildQueueEvents(option: BullModuleOptions): QueueEvents {
+  return new QueueEvents(option.name ? option.name : 'default', option);
+}
 
 function buildQueue(option: BullModuleOptions): Queue {
   const queue: Queue = new Queue(option.name ? option.name : 'default', option);
@@ -101,6 +106,19 @@ export function createQueueProviders(options: BullModuleOptions[]): Provider[] {
     useFactory: (o: BullModuleOptions) => {
       const queueName = o.name || option.name;
       return buildQueue({ ...o, name: queueName });
+    },
+    inject: [getQueueOptionsToken(option.name)],
+  }));
+}
+
+export function createQueueEventsProviders(
+  options: BullModuleOptions[],
+): Provider[] {
+  return options.map((option) => ({
+    provide: getQueueEventsToken(option.name),
+    useFactory: (o: BullModuleOptions) => {
+      const queueName = o.name || option.name;
+      return buildQueueEvents({ ...o, name: queueName });
     },
     inject: [getQueueOptionsToken(option.name)],
   }));

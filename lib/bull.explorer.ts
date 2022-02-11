@@ -6,10 +6,10 @@ import { Module } from '@nestjs/core/injector/module';
 import { MetadataScanner } from '@nestjs/core/metadata-scanner';
 import { Job, Processor, Queue, Worker, QueueEvents } from 'bullmq';
 import { BullMetadataAccessor } from './bull-metadata.accessor';
-import { NO_QUEUE_FOUND } from './bull.messages';
+import { NO_QUEUE_EVENTS_FOUND, NO_QUEUE_FOUND } from './bull.messages';
 import { BullQueueEventOptions } from './bull.types';
 import { ProcessOptions } from './decorators';
-import { getQueueToken } from './utils';
+import { getQueueEventsToken, getQueueToken } from './utils';
 
 @Injectable()
 export class BullExplorer implements OnModuleInit {
@@ -44,7 +44,11 @@ export class BullExplorer implements OnModuleInit {
 
       const queueToken = getQueueToken(queueName);
       const bullQueue = this.getQueue(queueToken, queueName);
-
+      const queueEventsToken = getQueueEventsToken(queueName);
+      const queueEventsInstance = this.getQueueEvents(
+        queueEventsToken,
+        queueName,
+      );
       /**
        * TODO: BullMQ splits work into queues/workers. In order to handle
        * events we need to put the listener on the worker and not the queue.
@@ -81,7 +85,7 @@ export class BullExplorer implements OnModuleInit {
             // Only create one instance of queue events
             if (!(keyName in queueEvents)) {
               queueEvents[`${bullQueue.name}:::${metadata.name || '*'}`] =
-                new QueueEvents(bullQueue.name, bullQueue.opts);
+                queueEventsInstance;
             }
           }
         },
@@ -131,6 +135,19 @@ export class BullExplorer implements OnModuleInit {
     }
   }
 
+  private getQueueEvents(
+    queueEventsToken: string,
+    queueName: string,
+  ): QueueEvents {
+    try {
+      return this.moduleRef.get<QueueEvents>(queueEventsToken, {
+        strict: false,
+      });
+    } catch (err) {
+      this.logger.error(NO_QUEUE_EVENTS_FOUND(queueName));
+      throw err;
+    }
+  }
   handleProcessor(
     instance: object,
     key: string,
@@ -138,7 +155,7 @@ export class BullExplorer implements OnModuleInit {
     moduleRef: Module,
     isRequestScoped: boolean,
     options: ProcessOptions = {},
-  ) {
+  ): Worker {
     let processor: Processor<any, void, string>;
 
     if (isRequestScoped) {

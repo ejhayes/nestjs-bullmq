@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Queue } from 'bullmq';
-import { BullModule, getQueueToken } from '../lib';
+import { Queue, QueueEvents } from 'bullmq';
+import { BullModule, getQueueEventsToken, getQueueToken } from '../lib';
 
 describe('BullModule', () => {
   describe('registerQueue', () => {
@@ -374,19 +374,31 @@ describe('BullModule', () => {
 
   describe('full flow (job handling)', () => {
     const fakeProcessor = jest.fn();
+    const failprocessor = jest.fn();
+
     let testingModule: TestingModule;
 
     beforeAll(async () => {
       testingModule = await Test.createTestingModule({
         imports: [
-          BullModule.registerQueue({
-            name: 'full_flow',
-            connection: {
-              host: '0.0.0.0',
-              port: 6380,
+          BullModule.registerQueue(
+            {
+              name: 'full_flow',
+              connection: {
+                host: '0.0.0.0',
+                port: 6380,
+              },
+              processors: [fakeProcessor],
             },
-            processors: [fakeProcessor],
-          }),
+            {
+              name: 'fail_flow',
+              connection: {
+                host: '0.0.0.0',
+                port: 6380,
+              },
+              processors: [failprocessor],
+            },
+          ),
         ],
       }).compile();
     });
@@ -402,6 +414,32 @@ describe('BullModule', () => {
       return new Promise<void>((resolve) => {
         setTimeout(async () => {
           expect(fakeProcessor).toHaveBeenCalledTimes(1);
+          resolve();
+        }, 1000);
+      });
+    });
+    it('should emit event with the queue', async () => {
+      jest.setTimeout(10000);
+      const queue = testingModule.get<Queue>(getQueueToken('full_flow'));
+      const failQueue = testingModule.get<Queue>(getQueueToken('fail_flow'));
+
+      const queueEvents = testingModule.get<QueueEvents>(
+        getQueueEventsToken('full_flow'),
+      );
+      const failQueueEvents = testingModule.get<QueueEvents>(
+        getQueueEventsToken('fail_flow'),
+      );
+      failprocessor.mockImplementation(() => Promise.reject(new Error('test')));
+      const listener = jest.fn();
+      const failListener = jest.fn();
+      queueEvents.on('completed', listener);
+      failQueueEvents.on('failed', failListener);
+      await queue.add('job1', null);
+      await failQueue.add('job1', null);
+      return new Promise<void>((resolve) => {
+        setTimeout(async () => {
+          expect(listener).toHaveBeenCalledTimes(1);
+          expect(failListener).toHaveBeenCalledTimes(1);
           resolve();
         }, 1000);
       });
