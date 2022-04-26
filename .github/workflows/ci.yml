@@ -37,7 +37,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - name: Run linters
-        uses: wearerequired/lint-action@v1
+        uses: wearerequired/lint-action@v2
         with:
           eslint: true
           eslint_extensions: ts
