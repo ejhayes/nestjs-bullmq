@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
-    "@commitlint/config-angular": "^13.1.0",
+    "@commitlint/config-angular": "^16.2.4",
     "@commitlint/config-conventional": "^13.1.0",
     "@nestjs/common": "7.6.17",
     "@nestjs/core": "7.6.17",
