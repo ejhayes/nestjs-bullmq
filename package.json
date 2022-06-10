@@ -62,7 +62,7 @@
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
     "rxjs": "6.6.7",
-    "semantic-release": "^17.4.7",
+    "semantic-release": "^19.0.3",
     "sort-package-json": "1.50.0",
     "trim-newlines": ">=3.0.1",
     "ts-jest": "26.5.6",
