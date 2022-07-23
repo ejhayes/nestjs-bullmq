@@ -1,4 +1,4 @@
-import { Job } from 'bullmq';
+import { Job, WorkerListener, QueueEventsListener } from 'bullmq';
 import {
   BullQueueAdvancedProcessor,
   BullQueueAdvancedSeparateProcessor,
@@ -24,31 +24,7 @@ export type BullQueueProcessorCallback = (job: Job) => Promise<any>;
 
 export type BullQueueSeparateProcessor = string;
 
-export type BullQueueEvent =
-  | 'error'
-  | 'waiting'
-  | 'active'
-  | 'stalled'
-  | 'progress'
-  | 'completed'
-  | 'failed'
-  | 'paused'
-  | 'resumed'
-  | 'cleaned'
-  | 'drained'
-  | 'removed'
-  | 'global:error'
-  | 'global:waiting'
-  | 'global:active'
-  | 'global:stalled'
-  | 'global:progress'
-  | 'global:completed'
-  | 'global:failed'
-  | 'global:paused'
-  | 'global:resumed'
-  | 'global:cleaned'
-  | 'global:drained'
-  | 'global:removed';
+export type BullQueueEvent = keyof WorkerListener | keyof QueueEventsListener;
 
 export type BullQueueEventOptions = RequireOnlyOne<
   {
