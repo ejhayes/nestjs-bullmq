@@ -5,6 +5,7 @@ import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import { Module } from '@nestjs/core/injector/module';
 import { MetadataScanner } from '@nestjs/core/metadata-scanner';
 import { Job, Processor, Queue, Worker, QueueEvents } from 'bullmq';
+import EventEmitter = require('events');
 import { BullMetadataAccessor } from './bull-metadata.accessor';
 import { NO_QUEUE_FOUND } from './bull.messages';
 import { BullQueueEventOptions } from './bull.types';
@@ -176,7 +177,7 @@ export class BullExplorer implements OnModuleInit {
     key: string,
     wrapper: InstanceWrapper,
     queue: Queue,
-    listener: Worker | QueueEvents,
+    listener: EventEmitter,
     options: BullQueueEventOptions,
   ) {
     if (!wrapper.isDependencyTreeStatic()) {
