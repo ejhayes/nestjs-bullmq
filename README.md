@@ -1,3 +1,11 @@
+# DEPRECATED
+
+This is now built into NestJS as of https://github.com/nestjs/bull/pull/1129. Please consider switching to the [officially supported version](https://www.npmjs.com/package/@nestjs/bullmq) instead of this package.
+
+```
+npm i --save @nestjs/bullmq
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
   <a href="https://docs.bullmq.io/" target="blank"><img src="https://user-images.githubusercontent.com/95200/64285204-99c04900-cf5b-11e9-925c-4743006ce420.png" width="300" /></a>
